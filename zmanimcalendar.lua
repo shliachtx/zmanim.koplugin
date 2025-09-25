@@ -53,7 +53,7 @@ local monthTranslation = {
     ["December"] = _("December"),
 }
 
-local CalendarDay = InputContainer:new{
+local CalendarDay = InputContainer:extend{
     daynum = nil,
     filler = false,
     width = nil,
@@ -70,18 +70,8 @@ function CalendarDay:init()
         return
     end
     if self.callback and Device:isTouchDevice() then
-        self.ges_events.Tap = {
-            GestureRange:new{
-                ges = "tap",
-                range = self.dimen,
-            }
-        }
-        self.ges_events.Hold = {
-            GestureRange:new{
-                ges = "hold",
-                range = self.dimen,
-            }
-        }
+        self.ges_events.Tap = { GestureRange:new{ ges = "tap", range = self.dimen, } }
+        self.ges_events.Hold = { GestureRange:new{ ges = "hold", range = self.dimen, } }
     end
 
     -- We need a smaller font size than the one provided
@@ -171,7 +161,7 @@ function CalendarDay:onHold()
 end
 
 
-local CalendarWeek = InputContainer:new{
+local CalendarWeek = InputContainer:extend{
     width = nil,
     height = nil,
     day_width = 0,
@@ -201,9 +191,9 @@ local SPAN_COLORS = {
     { Blitbuffer.COLOR_BLACK, Blitbuffer.COLOR_GRAY_E },
     { Blitbuffer.COLOR_BLACK, Blitbuffer.COLOR_LIGHT_GRAY },
     { Blitbuffer.COLOR_BLACK, Blitbuffer.COLOR_GRAY },
-    { Blitbuffer.COLOR_WHITE, Blitbuffer.COLOR_WEB_GRAY },
+    { Blitbuffer.COLOR_WHITE, Blitbuffer.COLOR_GRAY_9 },
     { Blitbuffer.COLOR_WHITE, Blitbuffer.COLOR_DARK_GRAY },
-    { Blitbuffer.COLOR_WHITE, Blitbuffer.COLOR_DIM_GRAY },
+    { Blitbuffer.COLOR_WHITE, Blitbuffer.COLOR_GRAY_5 },
     { Blitbuffer.COLOR_WHITE, Blitbuffer.COLOR_BLACK },
 }
 
@@ -307,7 +297,7 @@ function CalendarWeek:update()
     }
 end
 
-local ZmanimCalendar = InputContainer:new{
+local ZmanimCalendar = InputContainer:extend{
     start_day_of_week = 1, -- 1-7 = Sunday-Saturday
     nb_book_spans = 3,
     font_face = "xx_smallinfofont",
@@ -331,18 +321,13 @@ function ZmanimCalendar:init()
 
     if Device:hasKeys() then
         self.key_events = {
-            Close = { {"Back"}, doc = "close page" },
-            NextMonth = {{Input.group.PgFwd}, doc = "next page"},
-            PrevMonth = {{Input.group.PgBack}, doc = "prev page"},
+            Close = { {"Back"} },
+            NextMonth = { {Input.group.PgFwd} },
+            PrevMonth = { {Input.group.PgBack} },
         }
     end
     if Device:isTouchDevice() then
-        self.ges_events.Swipe = {
-            GestureRange:new{
-                ges = "swipe",
-                range = self.dimen,
-            }
-        }
+        self.ges_events.Swipe = { GestureRange:new{ ges = "swipe", range = self.dimen, } }
     end
 
     self.outer_padding = Size.padding.large

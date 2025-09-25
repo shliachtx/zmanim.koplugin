@@ -28,7 +28,7 @@ local cchar = ffi.typeof("char[?]")
 
 local FACE_NAME = "ezra"
 
-local ZmanimSS = InputContainer:new{
+local ZmanimSS = InputContainer:extend{
     name = "ZmanimSS",
     covers_fullscreen = true,
     modal = true,
@@ -40,9 +40,7 @@ local ZmanimSS = InputContainer:new{
 
 function ZmanimSS:init()
     if Device:hasKeys() then
-        self.key_events = {
-            Close = { {Device.input.group.Back}, doc = "close widget" },
-        }
+        self.key_events.Close = { {Device.input.group.Back} }
     end
     if Device:isTouchDevice() then
         local range = Geom:new{
@@ -50,9 +48,7 @@ function ZmanimSS:init()
             w = Screen:getWidth(),
             h = Screen:getHeight(),
         }
-        self.ges_events = {
-            Tap = { GestureRange:new{ ges = "tap", range = range } },
-        }
+        self.ges_events.Tap = { GestureRange:new{ ges = "tap", range = range } }
     end
     self.height = Screen:getHeight()
     self.width = Screen:getWidth()
